@@ -20,7 +20,12 @@
 # RGB Matrix is enabled at the revision level,
 # while we use the regular RGB underglow for testing
 RGB_MATRIX_ENABLE = no
-RGBLIGHT_ENABLE = yes
+RGBLIGHT_ENABLE = no
+MOUSEKEY_ENABLE = yes    # Mouse keys
+OLED_ENABLE     = yes
+LTO_ENABLE      = yes
+UNICODE_ENABLE  = yes
+DYNAMIC_TAPPING_TERM_ENABLE	= yes
 
 # Convert from Elite-C to standard RP2040
 CONVERT_TO=promicro_rp2040
