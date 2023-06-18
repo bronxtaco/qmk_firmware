@@ -26,6 +26,9 @@ OLED_ENABLE     = yes
 LTO_ENABLE      = yes
 UNICODE_ENABLE  = yes
 DYNAMIC_TAPPING_TERM_ENABLE	= yes
+CAPS_WORD_ENABLE = yes
+DYNAMIC_MACRO_ENABLE = yes
+CONSOLE_ENABLE = yes
 
 # Convert from Elite-C to standard RP2040
 CONVERT_TO=promicro_rp2040
