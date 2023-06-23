@@ -18,17 +18,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 enum layer_names {
     _BASE_DVORAK,
+	_EDIT,
     _LOWER,
     _RAISE,
-    _EDIT,
+	_WINDOWS,
+	_NUMPAD,
 };
 
 enum custom_keycodes {
   LOWER = SAFE_RANGE,
+  LOWER_FROM_LAYER,
   RAISE,
   SELECT_WORD,
+  CTRL_TAB,
+  VERT_LEAP,
   //ADJUST,
   //ONESHOT,
+  DAVE,
   DT_UP_50,
   DT_DOWN_50,
   DT_UP_X2,
@@ -61,57 +67,81 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                         KC_D,    KC_H,    KC_T,    KC_N, KC_S, KC_ENT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LWIN, LM(_LOWER, MOD_LSFT),    KC_Q,    KC_J,    KC_K,    KC_X,                         KC_B,    KC_M, KC_W,  KC_V, KC_Z, KC_LALT,
+      LM(_WINDOWS, MOD_LGUI), LM(_LOWER, MOD_LSFT),    KC_Q,    KC_J,    KC_K,    KC_X,                         KC_B,    KC_M, KC_W,  KC_V, KC_Z, KC_LALT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LSFT,   LOWER,  KC_BSPC,     KC_SPC,   RAISE, _______
+                                          KC_LSFT,   LOWER_FROM_LAYER,  KC_BSPC,     KC_SPC,   RAISE, KC_RSFT
                                       //`--------------------------'  `--------------------------'
 
+  ),
+  
+  [_EDIT] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      _______, A(KC_O), XXXXXXX, S(KC_F3), KC_F3, XXXXXXX,                     XXXXXXX, KC_HOME, KC_UP, KC_END, XXXXXXX, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, C(KC_A), C(KC_S), SELECT_WORD, C(KC_C), C(KC_V),                  C(KC_LEFT), KC_LEFT, KC_DOWN, KC_RGHT, C(KC_RGHT), _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, C(KC_Z), C(KC_X), C(KC_D), C(KC_F), XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          _______, LOWER_FROM_LAYER, _______,    _______, _______, _______
+                                      //`--------------------------'  `--------------------------'
   ),
 
   [_LOWER] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-       C(KC_GRV), CW_TOGG, _______,   _______, _______,  _______,                KC_LCBR,    KC_7,    KC_8,    KC_9,    KC_EQL,  KC_BSLS,
+       C(KC_GRV), CW_TOGG, XXXXXXX,   XXXXXXX, XXXXXXX,  TO(_NUMPAD),                KC_LCBR,    KC_7,    KC_8,    KC_9,    KC_EQL,  KC_BSLS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,    _______,    _______,    _______,    TO(_EDIT),    _______,     KC_LPRN,    KC_4,    KC_5,    KC_6,    KC_SCLN, KC_MINS,
+      _______,    XXXXXXX,    XXXXXXX,    XXXXXXX,    TO(_EDIT),    XXXXXXX,     KC_LPRN,    KC_4,    KC_5,    KC_6,    KC_SCLN, KC_MINS,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, KC_LWIN,                      KC_LBRC,    KC_1,    KC_2,    KC_3,    KC_SLSH, KC_GRV,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LBRC,    KC_1,    KC_2,    KC_3,    KC_SLSH, KC_GRV,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, _______,    _______, KC_0, _______
+                                          XXXXXXX, _______, XXXXXXX,    _______, KC_0, _______
                                       //`--------------------------'  `--------------------------'
   ),
   
   [_RAISE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      C(KC_TAB), _______, _______, _______, _______, _______,                   _______, KC_F7,   KC_F8,  KC_F9,  KC_F10, _______,
+      CTRL_TAB, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_F7,   KC_F8,  KC_F9,  KC_F10, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, _______,                     _______, KC_F4, KC_F5, KC_F6, KC_F11, _______,
+      _______, XXXXXXX, XXXXXXX, DM_REC1, DM_PLY1, XXXXXXX,                     XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, _______,                     _______, KC_F1, KC_F2, KC_F3, KC_F12, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                     XXXXXXX, KC_F1, KC_F2, KC_F3, KC_F12, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, KC_DEL,    _______, _______, _______
+                                          _______, _______, KC_DEL,    XXXXXXX, _______, XXXXXXX
                                       //`--------------------------'  `--------------------------'
   ),
   
-  [_EDIT] = LAYOUT_split_3x6_3(
+  [_WINDOWS] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, _______, _______, C(S(KC_F3)), C(KC_F3), _______,                 _______, KC_HOME, KC_UP, KC_END, _______, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_UP, KC_7,   KC_8,  KC_9, KC_DOWN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, C(KC_A), C(KC_S), SELECT_WORD, C(KC_C), C(KC_V),                  C(KC_LEFT), KC_LEFT, KC_DOWN, KC_RGHT, C(KC_RGHT), _______,
+      _______, XXXXXXX, S(KC_S), XXXXXXX, XXXXXXX, XXXXXXX,                      C(KC_LEFT), KC_4, KC_5, KC_6, C(KC_RGHT), _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, C(KC_Z), C(KC_X), C(KC_D), C(KC_F), KC_LWIN,                      _______, DM_PLY1, DM_PLY2, DM_REC1, DM_REC2, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LEFT, KC_1, KC_2, KC_3, KC_RGHT, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, TO(_BASE_DVORAK), _______,    _______, _______, _______
+                                          _______, _______, _______,    _______, _______, _______
+                                      //`--------------------------'  `--------------------------'
+  ),
+  
+  [_NUMPAD] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, A(KC_F4), KC_CALC,                      KC_PSLS, KC_P7, KC_P8, KC_P9, KC_PMNS, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_PAST, KC_P4, KC_P5, KC_P6, KC_PPLS, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, KC_P1, KC_P2, KC_P3, KC_PDOT, _______,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          _______, LOWER_FROM_LAYER, _______,    _______, KC_P0, _______
                                       //`--------------------------'  `--------------------------'
   ),
   
   /*
   [_EDIT] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, _______, _______, _______, _______, _______,                      _______, _______, _______, _______, _______, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -145,12 +175,22 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;
+	case LOWER_FROM_LAYER:
+		if (record->event.pressed) {
+			layer_move(_BASE_DVORAK);
+			layer_on(_LOWER);
+		} else {
+			layer_off(_LOWER);
+		}
+		return false;
+		break;
     case RAISE:
       if (record->event.pressed) {
         layer_on(_RAISE);
-        //update_tri_layer(_LOWER, _RAISE, _ADJUST);h
+        //update_tri_layer(_LOWER, _RAISE, _ADJUST);
       } else {
-        layer_off(_RAISE);
+        del_mods(MOD_MASK_CTRL);
+		layer_off(_RAISE);
         //update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
       return false;
@@ -163,6 +203,53 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 		}
 		return false;
 		break;
+	case CTRL_TAB:
+		if (record->event.pressed) {
+			if (!(mod_state & MOD_MASK_CTRL)) {
+				register_code(KC_LCTL);
+			}
+			register_code(KC_TAB);
+		} else {
+			unregister_code(KC_TAB);
+		}
+		return false;
+	case KC_UP: {
+		static bool vert_leap_enabled;
+		if (record->event.pressed) {
+			if (vert_leap_enabled) {
+				SEND_STRING(SS_TAP(X_UP)SS_TAP(X_UP)SS_TAP(X_UP)SS_TAP(X_UP)SS_TAP(X_UP));
+				return false;
+			}
+			return true;
+		} else {
+
+		}
+		return true;
+	}
+	case KC_DOWN: {
+		static bool vert_leap_enabled;
+		if (record->event.pressed) {
+			if (vert_leap_enabled) {
+				SEND_STRING(SS_TAP(X_DOWN)SS_TAP(X_DOWN)SS_TAP(X_DOWN)SS_TAP(X_DOWN)SS_TAP(X_DOWN));
+				return false;
+			}
+			return true;
+		} else {
+
+		}
+		return true;
+	}
+	case VERT_LEAP: {
+		static bool vert_leap_enabled;
+		if (record->event.pressed) {
+			vert_leap_enabled = true;
+		} else {
+			if (vert_leap_enabled) {
+				vert_leap_enabled = false;
+			}
+		}
+		return false;
+	}
 	case KC_LCBR: {
 		static bool rcbr_registered;
 		if (record->event.pressed) {
@@ -228,6 +315,24 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       }
       return false;
       break;*/
+	case DAVE:
+		/*
+		enter
+		tab
+		tab
+		shift tab
+		space
+		ctrl shift R
+		right
+		*/
+		if (record->event.pressed) {
+			SEND_STRING(SS_TAP(X_ENT)SS_TAP(X_TAB)SS_TAP(X_TAB)SS_DOWN(X_LSFT)SS_TAP(X_TAB)SS_UP(X_LSFT)SS_TAP(X_SPC)SS_DOWN(X_LCTL)SS_DOWN(X_LSFT)SS_TAP(X_R)SS_UP(X_LCTL)SS_UP(X_LSFT)SS_TAP(X_RGHT));
+			//SEND_STRING(SS_DOWN(X_LCTL)SS_TAP(X_RGHT)SS_TAP(X_LEFT)SS_DOWN(X_LSFT)SS_TAP(X_RGHT)SS_UP(X_LCTL)SS_UP(X_LSFT));
+		} else {
+			
+		}
+		return false;
+		break;
     case DT_UP_50:
       if (record->event.pressed) {
         g_tapping_term += 50;
