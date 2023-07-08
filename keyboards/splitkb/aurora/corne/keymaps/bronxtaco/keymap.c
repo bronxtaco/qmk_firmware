@@ -27,10 +27,9 @@ enum layer_names {
 
 enum custom_keycodes {
   LOWER = SAFE_RANGE,
-  LOWER_FROM_LAYER,
+  LOWER_SHIFT,
   RAISE,
   SELECT_WORD,
-  CTRL_TAB,
   VERT_LEAP,
   //ADJUST,
   //ONESHOT,
@@ -67,22 +66,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LCTL,    KC_A,    KC_O,    KC_E,    KC_U,    KC_I,                         KC_D,    KC_H,    KC_T,    KC_N, KC_S, KC_ENT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      LM(_WINDOWS, MOD_LGUI), LM(_LOWER, MOD_LSFT),    KC_Q,    KC_J,    KC_K,    KC_X,                         KC_B,    KC_M, KC_W,  KC_V, KC_Z, KC_LALT,
+      LM(_WINDOWS, MOD_LGUI), LOWER_SHIFT,    KC_Q,    KC_J,    KC_K,    KC_X,       KC_B,    KC_M, KC_W,  KC_V, KC_Z, KC_LSFT,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          KC_LSFT,   LOWER_FROM_LAYER,  KC_BSPC,     KC_SPC,   RAISE, KC_RSFT
+                                          KC_LSFT,   LOWER,  KC_BSPC,     KC_SPC,   RAISE, KC_LALT
                                       //`--------------------------'  `--------------------------'
 
   ),
   
   [_EDIT] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, A(KC_O), XXXXXXX, S(KC_F3), KC_F3, XXXXXXX,                     XXXXXXX, KC_HOME, KC_UP, KC_END, XXXXXXX, _______,
+      _______, A(KC_O), C(KC_F), S(KC_F3), KC_F3, XXXXXXX,                       XXXXXXX, KC_HOME, KC_UP, KC_END, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, C(KC_A), C(KC_S), SELECT_WORD, C(KC_C), C(KC_V),                  C(KC_LEFT), KC_LEFT, KC_DOWN, KC_RGHT, C(KC_RGHT), _______,
+      _______, C(KC_A), C(KC_S), SELECT_WORD, C(KC_C), C(KC_V),                  XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, C(KC_Z), C(KC_X), C(KC_D), C(KC_F), XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, _______, C(KC_X), C(KC_D), C(KC_Z), C(KC_Y),                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, LOWER_FROM_LAYER, _______,    _______, _______, _______
+                                          _______, LOWER, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
   ),
 
@@ -100,7 +99,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   
   [_RAISE] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      CTRL_TAB, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_F7,   KC_F8,  KC_F9,  KC_F10, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, KC_F7,   KC_F8,  KC_F9,  KC_F10, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, XXXXXXX, DM_REC1, DM_PLY1, XXXXXXX,                     XXXXXXX, KC_F4, KC_F5, KC_F6, KC_F11, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
@@ -114,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_UP, KC_7,   KC_8,  KC_9, KC_DOWN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, XXXXXXX, S(KC_S), XXXXXXX, XXXXXXX, XXXXXXX,                      C(KC_LEFT), KC_4, KC_5, KC_6, C(KC_RGHT), _______,
+      _______, XXXXXXX, S(KC_S), XXXXXXX, XXXXXXX, KC_V,                         C(KC_LEFT), KC_4, KC_5, KC_6, C(KC_RGHT), _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_LEFT, KC_1, KC_2, KC_3, KC_RGHT, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -153,29 +152,16 @@ uint8_t mod_state;
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 	mod_state = get_mods();
 	switch (keycode) {
-    /*case QWERTY:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_QWERTY);
-      }
-      return false;
-      break;
-    case QWERTY_NOHOMEROW:
-      if (record->event.pressed) {
-        set_single_persistent_default_layer(_QWERTY_NOHOMEROW);
-      }
-      return false;
-      break;*/
-    case LOWER:
-      if (record->event.pressed) {
-        layer_on(_LOWER);
-        //update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_LOWER);
-        //update_tri_layer(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-	case LOWER_FROM_LAYER:
+	case LOWER:
+		if (record->event.pressed) {
+			layer_move(_BASE_DVORAK);
+			layer_on(_LOWER);
+		} else {
+			layer_off(_LOWER);
+		}
+		return false;
+		break;
+	case LOWER_SHIFT:
 		if (record->event.pressed) {
 			layer_move(_BASE_DVORAK);
 			layer_on(_LOWER);
